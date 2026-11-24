@@ -1,0 +1,30 @@
+# Combined single-service image for platforms with a limited number of
+# service slots (e.g. Railway free tier): FastAPI serves both the API and the
+# built React SPA from one container. Local development still uses the
+# separate backend/Dockerfile + frontend/Dockerfile via docker-compose.yml.
+
+FROM node:20-alpine AS frontend-build
+WORKDIR /frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+ARG REACT_APP_API_URL=/api/v1
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+RUN npm run build
+
+FROM python:3.12-slim
+RUN groupadd -r airport && useradd -r -g airport -d /app airport
+WORKDIR /app
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/ .
+COPY --from=frontend-build /frontend/build ./static
+RUN chown -R airport:airport /app
+
+USER airport
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')" || exit 1
+
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

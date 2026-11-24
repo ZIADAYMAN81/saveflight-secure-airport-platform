@@ -1,0 +1,39 @@
+groups:
+  - name: airport_alerts
+    interval: 30s
+    rules:
+      - alert: HighFailedLogins
+        expr: increase(failed_login_attempts_total[5m]) > 10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of failed login attempts"
+          description: "More than 10 failed logins in the last 5 minutes."
+
+      - alert: UnauthorizedAccessSpike
+        expr: increase(unauthorized_access_attempts_total[5m]) > 20
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spike in unauthorized/forbidden access attempts"
+          description: "More than 20 401/403 responses in the last 5 minutes - possible probing or credential stuffing."
+
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend API is down"
+          description: "Prometheus cannot scrape the backend /metrics endpoint."
+
+      - alert: PostgresDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL exporter unreachable"
+          description: "The database may be down or the exporter has stopped reporting."

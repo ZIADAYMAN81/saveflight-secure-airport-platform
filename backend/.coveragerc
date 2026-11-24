@@ -1,0 +1,17 @@
+[run]
+source = src
+omit =
+    # One-off operational/bootstrap scripts invoked via CLI or Railway's
+    # preDeployCommand, not part of the request-serving API surface that
+    # the test suite exercises through TestClient. Covering these would
+    # mean writing tests that just re-assert "seeding code seeds data",
+    # not tests that verify a security property.
+    src/init_db.py
+    src/seed_demo_data.py
+    src/seed_all.py
+    src/bootstrap_admin.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
