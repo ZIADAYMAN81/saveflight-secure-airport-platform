@@ -69,6 +69,8 @@ authenticator app, e.g. Google Authenticator/Authy):
 | security  | security@example.com    | SecP@ssw0rd1!      | yes |
 | admin     | admin@example.com       | AdminP@ssw0rd1!    | yes |
 
+> These demo accounts are created only in a local development database by `init_db`. They are for trying the app; change or remove them before any real deployment.
+
 ### Backend tests
 
 ```bash
