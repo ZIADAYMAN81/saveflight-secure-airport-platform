@@ -1,5 +1,7 @@
 # SaveFlight: Secure Airport Operations Platform
 
+[![tests](https://github.com/ZIADAYMAN81/saveflight-secure-airport-platform/actions/workflows/tests.yml/badge.svg)](https://github.com/ZIADAYMAN81/saveflight-secure-airport-platform/actions/workflows/tests.yml)
+
 > University coursework, The British University in Egypt, 2026. Author: Ziad Ayman.
 
 A full-stack airport management system built security-first: a **React** passenger and staff portal, a **FastAPI** back-end over an encrypted **PostgreSQL** database, and a hardened **Docker / Nginx / Prometheus / Grafana** deployment stack.
@@ -147,3 +149,6 @@ sudo bash infrastructure/firewall/ufw_rules.sh
   and a rate-limited IP surface similar HTTP statuses (423 vs 429) by design.
 - The Nginx TLS listener needs a certificate before it will start; `generate-dev-cert.sh` produces a
   self-signed one for local testing. Use Let's Encrypt/certbot for anything internet-facing.
+
+## License
+MIT, see [LICENSE](LICENSE).
